@@ -22,4 +22,8 @@ app.get("/health", (req, res) => {
   return res.status(200).json({ status: "ok", timestamp: new Date() });
 });
 
+app.get("/", (req, res) => {
+  return res.status(200).json({ message: "API Photo Event rodando com sucesso!" });
+});
+
 export default app;
