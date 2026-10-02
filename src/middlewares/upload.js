@@ -1,23 +1,28 @@
 import multer from "multer";
 
-// 1. Armazenamento temporário na memória RAM (Buffer)
 const storage = multer.memoryStorage();
 
-// 2. Filtro estrito para permitir apenas tipos MIME de imagens conhecidos
-const fileFilter = (req, file, cb) => {
-  const allowedMimeTypes = ["image/jpeg", "image/png", "image/webp", "image/heic"];
+const ALLOWED_MIME_TYPES = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "video/mp4",
+  "video/quicktime",
+  "video/webm",
+];
 
-  if (allowedMimeTypes.includes(file.mimetype)) {
+const fileFilter = (req, file, cb) => {
+  if (ALLOWED_MIME_TYPES.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error("Formato de arquivo inválido. Apenas imagens (JPEG, PNG, WEBP, HEIC) são permitidas."), false);
+    cb(new Error("Formato de arquivo inválido. Formatos aceitos: JPG, PNG, WEBP, HEIC, MP4, MOV, WEBM."), false);
   }
 };
 
-// 3. Limites de segurança por requisição
 const limits = {
-  fileSize: 10 * 1024 * 1024, // 10MB por foto
-  files: 10, // Máximo de 10 fotos por submissão
+  fileSize: 50 * 1024 * 1024,
+  files: 10,
 };
 
 export const uploadMiddleware = multer({

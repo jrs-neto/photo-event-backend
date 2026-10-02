@@ -16,16 +16,20 @@ export const submissionRepository = {
       const submissionResult = await client.query(insertSubmissionQuery, [visitor_name, visitor_group, message]);
       const newSubmission = submissionResult.rows[0];
 
-      // 2. Insere as fotos associadas
+      // 2. Insere as mídias associadas (fotos ou vídeos)
       const insertPhotoQuery = `
-        INSERT INTO photos (submission_id, storage_path)
-        VALUES ($1, $2)
-        RETURNING id, storage_path, created_at;
+        INSERT INTO photos (submission_id, storage_path, media_type)
+        VALUES ($1, $2, $3)
+        RETURNING id, storage_path, media_type, created_at;
       `;
 
       const createdPhotos = [];
       for (const photo of photos) {
-        const photoResult = await client.query(insertPhotoQuery, [newSubmission.id, photo.storage_path]);
+        const photoResult = await client.query(insertPhotoQuery, [
+          newSubmission.id,
+          photo.storage_path,
+          photo.media_type || "image", // Fallback para 'image' se vier ausente
+        ]);
         createdPhotos.push(photoResult.rows[0]);
       }
 
