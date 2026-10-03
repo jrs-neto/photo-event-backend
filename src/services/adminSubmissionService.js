@@ -23,6 +23,7 @@ export const adminSubmissionService = {
             return {
               id: photo.id,
               url: error ? null : data.signedUrl,
+              media_type: photo.media_type,
               created_at: photo.created_at,
             };
           }),

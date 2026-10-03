@@ -14,6 +14,7 @@ export const adminSubmissionRepository = {
             JSON_BUILD_OBJECT(
               'id', p.id,
               'storage_path', p.storage_path,
+              'media_type', p.media_type,
               'created_at', p.created_at
             )
           ) FILTER (WHERE p.id IS NOT NULL), '[]'
